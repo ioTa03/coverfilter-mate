@@ -5,7 +5,7 @@ export type ProjectType = 'New Construction' | 'Retrofit';
 export type LoadingType = 'Pedestrian' | 'SUV' | 'Light Duty Truck' | 'Fire Tender' | 'Heavy Duty Truck';
 export type JointPlacement = 'Floor' | 'Wall' | 'Ceiling' | 'Roof';
 export type SpecialRequirement = 'Fire Protection' | 'Waterproofing';
-export type BuildingType = 'Commercial' | 'Residential' | 'Industrial' | 'Hospitality' | 'Healthcare' | 'Stadium' | 'Metro' | 'Airport' | 'Mixed Use';
+export type BuildingType = 'Commercial' | 'Residential' | 'Industrial' | 'Hospitality' | 'Healthcare' | 'Stadium' | 'Metro' | 'Airport' | 'Mixed Use' | 'Parking';
 
 export interface FilterCriteria {
   nominalJointWidth: number | null;
