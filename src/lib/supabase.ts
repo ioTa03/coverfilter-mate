@@ -7,11 +7,21 @@ import { Product } from '@/types';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Create client only if credentials are available
+export const supabase = supabaseUrl 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 // Function to fetch products from Supabase
 export async function fetchProducts(): Promise<Product[]> {
   try {
+    // If supabase is not configured, return sample data
+    if (!supabase) {
+      console.warn('Supabase not configured, using sample data');
+      const { sampleProducts } = await import('../data/productData');
+      return sampleProducts;
+    }
+    
     // Fetch all products from the 'products' table
     const { data, error } = await supabase
       .from('products')
@@ -42,6 +52,13 @@ export async function fetchProducts(): Promise<Product[]> {
 // Function to fetch products with filtering
 export async function fetchFilteredProducts(criteria: any): Promise<Product[]> {
   try {
+    // If supabase is not configured, use client-side filtering
+    if (!supabase) {
+      const { sampleProducts } = await import('../data/productData');
+      const { filterProducts } = await import('../lib/filterLogic');
+      return filterProducts(sampleProducts, criteria);
+    }
+    
     let query = supabase.from('products').select('*');
     
     // Apply filters based on criteria
