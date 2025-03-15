@@ -3,17 +3,15 @@ import { useState, useEffect } from 'react';
 import FilterForm from '@/components/FilterForm';
 import ResultsGrid from '@/components/ResultsGrid';
 import { FilterCriteria, Product } from '@/types';
-import { fetchProducts, fetchFilteredProducts } from '@/lib/supabase';
+import { fetchProducts } from '@/data/productData';
 import { filterProducts } from '@/lib/filterLogic';
 import { Skeleton } from '@/components/ui/skeleton';
-import { toast } from '@/components/ui/use-toast';
 
 const Index = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasSearched, setHasSearched] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
   
   useEffect(() => {
     // Fetch products on initial load
@@ -22,53 +20,22 @@ const Index = () => {
         const data = await fetchProducts();
         setProducts(data);
         setIsLoading(false);
-        // Check if we're connected to a real database by seeing if more than our sample data exists
-        setIsConnected(data.length > 5); // Our sample has 5 products
       } catch (error) {
         console.error('Error fetching products:', error);
         setIsLoading(false);
-        toast({
-          title: "Database Connection Error",
-          description: "Using sample data instead. Check your database configuration.",
-          variant: "destructive"
-        });
       }
     };
     
     loadProducts();
   }, []);
   
-  const handleFilterSubmit = async (criteria: FilterCriteria) => {
-    setIsLoading(true);
-    try {
-      let filtered;
-      if (isConnected) {
-        // Use Supabase filtering if connected
-        filtered = await fetchFilteredProducts(criteria);
-      } else {
-        // Fall back to client-side filtering if not connected
-        filtered = filterProducts(products, criteria);
-      }
-      setFilteredProducts(filtered);
-      setHasSearched(true);
-      setIsLoading(false);
-      
-      // Scroll to top for results
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (error) {
-      console.error('Error filtering products:', error);
-      // Fall back to client-side filtering
-      const filtered = filterProducts(products, criteria);
-      setFilteredProducts(filtered);
-      setHasSearched(true);
-      setIsLoading(false);
-      
-      toast({
-        title: "Database Query Error",
-        description: "Using client-side filtering instead. Check your database connection.",
-        variant: "destructive"
-      });
-    }
+  const handleFilterSubmit = (criteria: FilterCriteria) => {
+    const filtered = filterProducts(products, criteria);
+    setFilteredProducts(filtered);
+    setHasSearched(true);
+    
+    // Scroll to top for results
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   
   const handleBack = () => {
@@ -108,11 +75,6 @@ const Index = () => {
               <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
                 Expansion Joint Finder
               </span>
-              {isConnected && (
-                <span className="ml-2 inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                  Live Database
-                </span>
-              )}
             </div>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
               Find the Perfect Expansion Joint Cover
