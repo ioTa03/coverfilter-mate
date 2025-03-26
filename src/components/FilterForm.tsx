@@ -179,14 +179,13 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
   const jointPlacements: JointPlacement[] = ['Floor', 'Wall', 'Ceiling', 'Roof'];
   const specialRequirements: SpecialRequirement[] = ['Fire Protection', 'Waterproofing'];
   const buildingTypes: BuildingType[] = ['Commercial', 'Residential', 'Industrial', 'Hospitality', 'Healthcare', 'Stadium', 'Metro', 'Airport', 'Mixed Use', 'Parking'];
-
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-6">
       <div className="mb-6 text-center">
         <h2 className="text-2xl font-medium mb-2">Find Your Ideal Expansion Joint Cover</h2>
         <p className="text-muted-foreground">Complete the questionnaire to filter products that match your specifications</p>
       </div>
-
+  
       <div className="mb-6 glass-card p-4">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-medium">Completion: {getCompletionPercentage()}%</span>
@@ -225,7 +224,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
           </div>
         </div>
       </div>
-
+  
       <div className="space-y-6">
         {/* Step 1: Joint Width */}
         <FilterStep
@@ -234,6 +233,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
           isActive={currentStep === 1}
           isCompleted={completedSteps.has(1)}
           stepNumber={1}
+          onClick={() => setCurrentStep(1)} // Add onClick
         >
           <div className="space-y-4 mb-4">
             <div className="flex items-center space-x-2">
@@ -286,7 +286,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
             </div>
           </div>
         </FilterStep>
-
+  
         {/* Step 2: Movement Type and Location */}
         <FilterStep
           title="Movement & Location"
@@ -294,6 +294,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
           isActive={currentStep === 2}
           isCompleted={completedSteps.has(2)}
           stepNumber={2}
+          onClick={() => setCurrentStep(2)} // Add onClick
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <div>
@@ -344,7 +345,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
             </div>
           </div>
         </FilterStep>
-
+  
         {/* Step 3: Maximum Loading and Joint Placement */}
         <FilterStep
           title="Loading & Placement"
@@ -352,6 +353,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
           isActive={currentStep === 3}
           isCompleted={completedSteps.has(3)}
           stepNumber={3}
+          onClick={() => setCurrentStep(3)} // Add onClick
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
             <div>
@@ -420,32 +422,10 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
                   </div>
                 ))}
               </div>
-                              {/* Add this after the specialRequirements div */}
-              
             </div>
-            <Label className="text-base font-medium mt-4 mb-2 block">Aesthetics</Label>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="aesthetics-yes"
-                    checked={criteria.aesthetics === true}
-                    onCheckedChange={() => updateCriteria({ aesthetics: criteria.aesthetics === true ? null : true })}
-                  />
-                  <Label htmlFor="aesthetics-yes" className="cursor-pointer">Yes</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="aesthetics-no"
-                    checked={criteria.aesthetics === false}
-                    onCheckedChange={() => updateCriteria({ aesthetics: criteria.aesthetics === false ? null : false })}
-                  />
-                  <Label htmlFor="aesthetics-no" className="cursor-pointer">No</Label>
-                </div>
-              </div>
-
           </div>
         </FilterStep>
-
+  
         {/* Step 4: Building Type */}
         <FilterStep
           title="Building Type"
@@ -453,6 +433,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
           isActive={currentStep === 4}
           isCompleted={completedSteps.has(4)}
           stepNumber={4}
+          onClick={() => setCurrentStep(4)} // Add onClick
         >
           <div className="mb-4">
             <Label className="text-base font-medium mb-2 block">Building Type</Label>
@@ -479,7 +460,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
           </div>
         </FilterStep>
       </div>
-
+  
       <div className="flex justify-between mt-6">
         <div className="flex space-x-2">
           <Button
@@ -498,7 +479,7 @@ const FilterForm = ({ onFilterSubmit }: FilterFormProps) => {
             {getClearMessage()}
           </Button>
         </div>
-
+  
         <Button
           onClick={handleNext}
           className="btn-primary"
